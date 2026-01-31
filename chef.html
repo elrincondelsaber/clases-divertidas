@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Chef | Rincón del Saber</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',system-ui}
+body{
+  min-height:100vh;
+  background:linear-gradient(135deg,#f7971e,#ffd200);
+  display:flex;
+  justify-content:center;
+  align-items:flex-start;
+  padding:30px;
+  color:#fff;
+}
+
+.contenedor{
+  width:100%;
+  max-width:600px;
+}
+
+h1{text-align:center;margin-bottom:20px}
+
+.tarjeta{
+  background:rgba(255,255,255,.15);
+  backdrop-filter:blur(12px);
+  border-radius:18px;
+  padding:18px 22px;
+  margin-bottom:14px;
+  cursor:pointer;
+  box-shadow:0 10px 25px rgba(0,0,0,.3);
+  transition:transform .2s;
+}
+
+.tarjeta:hover{transform:translateY(-3px)}
+
+.tarjeta h2{font-size:20px;margin-bottom:10px}
+
+.detalle{
+  display:block;
+  margin-top:10px;
+  font-size:15px;
+  line-height:1.4;
+}
+
+.boton{
+  margin-top:10px;
+  padding:10px 16px;
+  border:none;
+  border-radius:12px;
+  font-weight:bold;
+  cursor:pointer;
+  color:white;
+  background:linear-gradient(135deg,#ff6a00,#ee0979);
+  transition:transform .2s;
+  width:100%;
+}
+
+.boton:hover{transform:scale(1.05)}
+
+.juego, .final{
+  background:rgba(255,255,255,.15);
+  backdrop-filter:blur(12px);
+  border-radius:22px;
+  padding:25px;
+  margin-top:20px;
+  text-align:center;
+  box-shadow:0 20px 40px rgba(0,0,0,.4);
+  display:none;
+}
+
+.puntaje{font-size:15px;margin-bottom:10px}
+.pregunta{font-size:18px;margin:18px 0;font-weight:bold}
+
+.opciones button{
+  width:100%;
+  margin:6px 0;
+  padding:12px;
+  border:none;
+  border-radius:14px;
+  font-size:16px;
+  font-weight:bold;
+  cursor:pointer;
+  background:linear-gradient(135deg,#36d1dc,#5b86e5);
+  color:white;
+}
+
+.correcto{animation:ok .4s}
+.incorrecto{animation:bad .4s}
+
+@keyframes ok{0%{background:#4caf50}100%{background:transparent}}
+@keyframes bad{0%{background:#f44336}100%{background:transparent}}
+
+/* =========================
+   ESTILO PANTALLA FINAL - CHEF
+   ========================= */
+
+.final{
+  background:rgba(255,255,255,.15);
+  backdrop-filter:blur(12px);
+  border-radius:22px;
+  padding:30px;
+  box-shadow:0 25px 50px rgba(0,0,0,.45);
+}
+
+/* Botones finales */
+.final button{
+  width:100%;
+  margin-top:12px;
+  padding:14px;
+  border:none;
+  border-radius:16px;
+  font-size:16px;
+  font-weight:bold;
+  cursor:pointer;
+  color:white;
+  background:linear-gradient(135deg,#f7971e,#ffd200);
+  box-shadow:0 10px 22px rgba(0,0,0,.35);
+  transition:transform .2s, box-shadow .2s;
+}
+
+/* Hover */
+.final button:hover{
+  transform:translateY(-2px);
+  box-shadow:0 14px 28px rgba(0,0,0,.45);
+}
+
+/* Click */
+.final button:active{
+  transform:scale(.97);
+}
+
+.breadcrumb{
+  text-align:center;
+  margin-bottom:25px;
+  font-size:14px;
+  opacity:.95;
+}
+
+.breadcrumb a{
+  color:#fff;
+  text-decoration:none;
+  font-weight:600;
+}
+
+.breadcrumb span{
+  margin:0 6px;
+}
+
+</style>
+</head>
+<body>
+
+<div class="contenedor">
+  <h1>🍳 Cocina Divertida</h1>
+  <nav class="breadcrumb">
+  <a href="index.html">Inicio</a>
+  <span>›</span>
+  <a href="cursos-game.html">Cursos</a>
+  <span>›</span>
+  <span>Cocina</span>
+</nav>
+
+</nav>
+
+
+  <!-- Información del curso -->
+  <div class="tarjeta">
+    <h2>🍕 Pizza Casera</h2>
+    <div class="detalle">
+      <p><strong>Ingredientes:</strong> Masa, Salsa, Queso, Ingredientes al gusto</p>
+      <p><strong>Medidas:</strong> 200g masa, 100g queso</p>
+      <p><strong>Pasos:</strong> Extender masa, agregar salsa y queso, hornear 20 min</p>
+    </div>
+  </div>
+
+  <div class="tarjeta">
+    <h2>🍰 Pastel de Chocolate</h2>
+    <div class="detalle">
+      <p><strong>Ingredientes:</strong> Harina, Azúcar, Huevos, Cacao, Mantequilla</p>
+      <p><strong>Medidas:</strong> 150g harina, 100g azúcar, 2 huevos</p>
+      <p><strong>Pasos:</strong> Mezclar, hornear 25-30 min, enfriar y decorar</p>
+    </div>
+  </div>
+
+  <div class="tarjeta">
+    <h2>🥗 Ensalada Saludable</h2>
+    <div class="detalle">
+      <p><strong>Ingredientes:</strong> Lechuga, Tomate, Pepino, Zanahoria, Aceite, Vinagre</p>
+      <p><strong>Medidas:</strong> 100g de cada vegetal, 1 cda aceite</p>
+      <p><strong>Pasos:</strong> Lavar y cortar, mezclar, aliñar, servir fresco</p>
+    </div>
+  </div>
+
+  <button class="boton" id="darExamen">Dar examen</button>
+
+  <!-- Área de juego -->
+  <div class="juego" id="juego">
+    <div class="puntaje">
+      Pregunta <span id="num">1</span>/4 |
+      ⭐ <span id="puntos">0</span>
+    </div>
+    <div class="pregunta" id="pregunta"></div>
+    <div class="opciones" id="opciones"></div>
+  </div>
+
+  <!-- Pantalla final -->
+  <div class="final" id="final">
+    <h2>🎉 ¡Examen terminado!</h2>
+    <p>Correctas: <strong><span id="correctas"></span>/4</strong></p>
+    <p>Puntaje total: ⭐ <span id="total"></span></p>
+    <button onclick="reiniciar()">Dar examen de nuevo</button>
+    <button onclick="resetPuntos()">Restablecer puntos</button>
+    <button onclick="volver()">Volver a cursos</button>
+  </div>
+
+</div>
+
+
+<script>
+const preguntas = [
+  {texto:"¿Qué cantidad de masa lleva la pizza?", opciones:["200g","100g","50g"], correcta:0},
+  {texto:"¿Cuántos huevos se usan en el pastel?", opciones:["1","2","3"], correcta:1},
+  {texto:"¿Qué se usa para aliñar la ensalada?", opciones:["Aceite y vinagre","Salsa","Azúcar"], correcta:0},
+  {texto:"¿Cuánto queso se pone en la pizza?", opciones:["50g","100g","150g"], correcta:1}
+];
+
+let actual=0, correctas=0, total=Number(localStorage.getItem("chefPuntos"))||0;
+
+document.getElementById("total").textContent=total;
+
+function cargar(){
+  const p = preguntas[actual];
+  document.getElementById("pregunta").textContent=p.texto;
+  const opcionesDiv=document.getElementById("opciones");
+  opcionesDiv.innerHTML="";
+  p.opciones.forEach((op,i)=>{
+    const btn=document.createElement("button");
+    btn.textContent=op;
+    btn.onclick=()=>responder(i);
+    opcionesDiv.appendChild(btn);
+  });
+}
+
+function responder(i){
+  const box=document.getElementById("juego");
+  if(i===preguntas[actual].correcta){
+    correctas++;
+    total++;
+    box.classList.add("correcto");
+  }else{
+    box.classList.add("incorrecto");
+  }
+  localStorage.setItem("chefPuntos",total);
+  document.getElementById("puntos").textContent=correctas;
+  setTimeout(()=>{
+    box.classList.remove("correcto","incorrecto");
+    actual++;
+    if(actual<preguntas.length){
+      document.getElementById("num").textContent=actual+1;
+      cargar();
+    }else{
+      fin();
+    }
+  },500);
+}
+
+function fin(){
+  document.getElementById("juego").style.display="none";
+  document.getElementById("final").style.display="block";
+  document.getElementById("correctas").textContent=correctas;
+  document.getElementById("total").textContent=total;
+}
+
+function reiniciar(){
+  actual=0; correctas=0;
+  document.getElementById("num").textContent=1;
+  document.getElementById("puntos").textContent=0;
+  document.getElementById("final").style.display="none";
+  document.getElementById("juego").style.display="block";
+  cargar();
+}
+
+function resetPuntos(){
+  if(confirm("¿Restablecer puntos totales?")){
+    total=0;
+    localStorage.setItem("chefPuntos",0);
+    document.getElementById("total").textContent=0;
+  }
+}
+
+function volver(){window.location.href="cursos-game.html";}
+
+document.getElementById("darExamen").addEventListener("click",()=>{
+  document.getElementById("darExamen").style.display="none";
+  document.getElementById("juego").style.display="block";
+  cargar();
+});
+</script>
+</body>
+</html>

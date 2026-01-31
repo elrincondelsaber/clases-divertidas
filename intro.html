@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Las Vacacionesno tienen que ser aburridas</title>
+
+    <style>
+        /* ===== RESET ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        /* ===== BODY ===== */
+        body {
+            height: 100vh;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            color: white;
+            position: relative;
+            transition: opacity 0.8s ease;
+            cursor: pointer; /* indica que se puede hacer click */
+        }
+
+        /* ===== CONTENEDOR ===== */
+        .contenedor {
+            text-align: center;
+            animation: aparecer 1.5s ease-out forwards;
+            z-index: 2;
+            pointer-events: none; /* permite click en toda la pantalla */
+        }
+
+        /* ===== IMAGEN ===== */
+        .logo {
+            width: 160px;
+            margin-bottom: 20px;
+            animation: flotar 3s ease-in-out infinite;
+            filter: drop-shadow(0 0 15px rgba(255,255,255,0.5));
+        }
+
+        /* ===== TITULO ===== */
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            animation: latido 2s infinite;
+            text-shadow: 0 0 20px rgba(255,255,255,0.6);
+        }
+
+        /* ===== TEXTO MAQUINA ===== */
+        .maquina {
+            font-size: 1.4rem;
+            white-space: nowrap;
+            overflow: hidden;
+            border-right: 3px solid white;
+            width: 0;
+            animation: escribir 3s steps(35) forwards, cursor 0.7s infinite;
+        }
+
+        /* ===== CONFETTI ===== */
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            animation: caer linear infinite;
+            opacity: 0.9;
+        }
+
+        /* ===== ANIMACIONES ===== */
+        @keyframes aparecer {
+            from { opacity: 0; transform: scale(0.7); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        @keyframes latido {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.08); }
+        }
+
+        @keyframes flotar {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-12px); }
+        }
+
+        @keyframes escribir {
+            to { width: 100%; }
+        }
+
+        @keyframes cursor {
+            50% { border-color: transparent; }
+        }
+
+        @keyframes caer {
+            from { transform: translateY(-100vh) rotate(0deg); }
+            to { transform: translateY(100vh) rotate(360deg); }
+        }
+    </style>
+</head>
+
+<body onclick="entrar()">
+
+    
+    <!-- ===== CONTENIDO ===== -->
+    <div class="contenedor">
+        <img src="logo.png.png" alt="Logo" class="logo">
+        <h1>Aprender Jugando, Crecer Sonriendo</h1>
+        <p class="maquina">Aprende, juega y descubre con nosotros .Vacaciones que se quedan en el Corazón</p>
+    </div>
+
+    <!-- ===== JAVASCRIPT ===== -->
+    <script>
+        /* ===== CONFETTI ===== */
+        const colores = ["#ff0000", "#00ffcc", "#ffff00", "#ff00ff", "#00ff00"];
+
+        for (let i = 0; i < 60; i++) {
+            const confetti = document.createElement("div");
+            confetti.classList.add("confetti");
+
+            confetti.style.left = Math.random() * 100 + "vw";
+            confetti.style.backgroundColor = colores[Math.floor(Math.random() * colores.length)];
+            confetti.style.animationDuration = (Math.random() * 3 + 2) + "s";
+            confetti.style.width = confetti.style.height = (Math.random() * 8 + 6) + "px";
+
+            document.body.appendChild(confetti);
+        }
+
+        /* ===== IR A PANEL ===== */
+        function entrar() {
+            document.body.style.opacity = "0";
+            setTimeout(() => {
+                window.location.href = "panelfx.html";
+            }, 800);
+        }
+    </script>
+
+</body>
+</html>

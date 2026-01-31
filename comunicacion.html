@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Comunicación | Rincón del Saber</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0;font-family:'Segoe UI',system-ui}
+body{
+  min-height:100vh;
+  background:linear-gradient(135deg,#ff9966,#ff5e62);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  color:#fff;
+}
+
+.juego{
+  background:rgba(255,255,255,.15);
+  backdrop-filter:blur(12px);
+  border-radius:22px;
+  padding:25px;
+  width:100%;
+  max-width:440px;
+  text-align:center;
+  box-shadow:0 25px 50px rgba(0,0,0,.4);
+}
+
+.puntaje{font-size:15px;margin-bottom:10px}
+.pregunta{font-size:20px;margin:18px 0;font-weight:bold}
+
+.opciones button{
+  width:100%;
+  margin:6px 0;
+  padding:12px;
+  border:none;
+  border-radius:14px;
+  font-size:16px;
+  font-weight:bold;
+  cursor:pointer;
+  background:linear-gradient(135deg,#36d1dc,#5b86e5);
+  color:white;
+}
+
+.correcto{animation:ok .4s}
+.incorrecto{animation:bad .4s}
+
+@keyframes ok{
+  0%{background:#4caf50}
+  100%{background:transparent}
+}
+@keyframes bad{
+  0%{background:#f44336}
+  100%{background:transparent}
+}
+
+.final{display:none}
+
+/* =========================
+   ESTILO PANTALLA FINAL - COMUNICACIÓN
+   ========================= */
+
+.final{
+  background:rgba(255,255,255,.15);
+  backdrop-filter:blur(12px);
+  border-radius:22px;
+  padding:30px;
+  box-shadow:0 25px 50px rgba(0,0,0,.45);
+}
+
+/* Botones finales */
+.final button{
+  width:100%;
+  margin-top:12px;
+  padding:14px;
+  border:none;
+  border-radius:16px;
+  font-size:16px;
+  font-weight:bold;
+  cursor:pointer;
+  color:white;
+  background:linear-gradient(135deg,#ff9966,#ff5e62);
+  box-shadow:0 10px 22px rgba(0,0,0,.35);
+  transition:transform .2s, box-shadow .2s;
+}
+
+/* Hover */
+.final button:hover{
+  transform:translateY(-2px);
+  box-shadow:0 14px 28px rgba(0,0,0,.45);
+}
+
+/* Click */
+.final button:active{
+  transform:scale(.97);
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="juego" id="juego">
+  <h2>📖 Comunicación</h2>
+  <div class="puntaje">
+    Pregunta <span id="num">1</span>/10 |
+    ⭐ <span id="puntos">0</span>
+  </div>
+
+  <div class="pregunta" id="pregunta"></div>
+
+  <div class="opciones" id="opciones"></div>
+</div>
+
+<div class="juego final" id="final">
+  <h2>🎉 ¡Juego terminado!</h2>
+  <p>Correctas: <strong><span id="correctas"></span>/10</strong></p>
+  <p>Puntaje total: ⭐ <span id="total"></span></p>
+
+  <button onclick="reiniciar()">Jugar de nuevo</button>
+  <button onclick="resetPuntos()">Reiniciar puntos</button>
+  <button onclick="volver()">Volver a cursos</button>
+</div>
+
+<script>
+const preguntas = [
+  {
+    texto: "¿Cuál palabra es un sinónimo de FELIZ?",
+    opciones: ["Triste", "Contento", "Cansado"],
+    correcta: 1
+  },
+  {
+    texto: "¿Cuál palabra está bien escrita?",
+    opciones: ["Aver", "Haber", "Habér"],
+    correcta: 1
+  },
+  {
+    texto: "¿Cuál es el plural de LÁPIZ?",
+    opciones: ["Lápizes", "Lápizs", "Lápices"],
+    correcta: 2
+  },
+  {
+    texto: "¿Qué palabra completa la frase: Yo ___ al parque?",
+    opciones: ["Boy", "Voy", "Boi"],
+    correcta: 1
+  },
+  {
+    texto: "¿Cuál es un sustantivo?",
+    opciones: ["Correr", "Casa", "Azul"],
+    correcta: 1
+  },
+  {
+    texto: "¿Qué palabra es un verbo?",
+    opciones: ["Mesa", "Saltó", "Bonito"],
+    correcta: 1
+  },
+  {
+    texto: "¿Cuál palabra rima con CANCIÓN?",
+    opciones: ["Mesa", "Corazón", "Sol"],
+    correcta: 1
+  },
+  {
+    texto: "¿Cuál es un adjetivo?",
+    opciones: ["Perro", "Corre", "Grande"],
+    correcta: 2
+  },
+  {
+    texto: "¿Cuál palabra indica una acción?",
+    opciones: ["Dormir", "Cama", "Sueño"],
+    correcta: 0
+  },
+  {
+    texto: "¿Qué palabra está mal escrita?",
+    opciones: ["Casa", "Escuela", "Esquela"],
+    correcta: 2
+  }
+];
+
+let actual = 0;
+let correctas = 0;
+let total = Number(localStorage.getItem("comuPuntos")) || 0;
+
+document.getElementById("total").textContent = total;
+
+function cargar(){
+  const p = preguntas[actual];
+  document.getElementById("pregunta").textContent = p.texto;
+  document.getElementById("opciones").innerHTML = "";
+
+  p.opciones.forEach((op,i)=>{
+    const btn = document.createElement("button");
+    btn.textContent = op;
+    btn.onclick = ()=>responder(i);
+    document.getElementById("opciones").appendChild(btn);
+  });
+}
+
+function responder(i){
+  const box = document.getElementById("juego");
+
+  if(i === preguntas[actual].correcta){
+    correctas++;
+    total++;
+    box.classList.add("correcto");
+  }else{
+    box.classList.add("incorrecto");
+  }
+
+  localStorage.setItem("comuPuntos", total);
+  document.getElementById("puntos").textContent = correctas;
+
+  setTimeout(()=>{
+    box.classList.remove("correcto","incorrecto");
+    actual++;
+    if(actual < 10){
+      document.getElementById("num").textContent = actual + 1;
+      cargar();
+    }else{
+      fin();
+    }
+  },500);
+}
+
+function fin(){
+  document.getElementById("juego").style.display="none";
+  document.getElementById("final").style.display="block";
+  document.getElementById("correctas").textContent = correctas;
+  document.getElementById("total").textContent = total;
+}
+
+function reiniciar(){
+  actual=0;
+  correctas=0;
+  document.getElementById("num").textContent=1;
+  document.getElementById("puntos").textContent=0;
+  document.getElementById("final").style.display="none";
+  document.getElementById("juego").style.display="block";
+  cargar();
+}
+
+function resetPuntos(){
+  if(confirm("¿Reiniciar puntos totales?")){
+    total=0;
+    localStorage.setItem("comuPuntos",0);
+    document.getElementById("total").textContent=0;
+  }
+}
+
+function volver(){
+  window.location.href="cursos-game.html";
+}
+
+cargar();
+</script>
+</body>
+</html>

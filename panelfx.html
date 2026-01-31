@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>clases de verano 2026</title>
+    <link rel="stylesheet" href="panel.css">
+    <style>
+/* Confeti animación simple */
+.confeti {
+    position: fixed; /* fijado a la pantalla, no al body */
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    animation: caer 2s linear forwards;
+    pointer-events: none;
+    z-index: 1000;
+}
+
+@keyframes caer {
+    0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+    100% { transform: translateY(200px) rotate(360deg); opacity: 0; }
+}
+
+/* Burbuja colorida */
+.burbuja {
+    position: fixed;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 999;
+    animation: flotarBurbuja 2.5s ease-in forwards;
+    box-shadow: inset -2px -2px 5px rgba(0,0,0,0.2), 0 0 10px rgba(255,255,255,0.5);
+}
+
+@keyframes flotarBurbuja {
+    0% {
+        transform: translateY(0) translateX(0) scale(1);
+        opacity: 1;
+    }
+    50% {
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(-400px) translateX(100px) scale(0.3);
+        opacity: 0;
+    }
+}
+
+/* Estrella brillante */
+.estrella {
+    position: fixed;
+    pointer-events: none;
+    z-index: 998;
+    font-size: 20px;
+    animation: brillar 2s ease-out forwards;
+    filter: drop-shadow(0 0 5px rgba(255,255,0,0.8));
+}
+
+@keyframes brillar {
+    0% {
+        transform: translate(0, 0) scale(1) rotate(0deg);
+        opacity: 1;
+    }
+    50% {
+        opacity: 1;
+    }
+    100% {
+        transform: translate(150px, -300px) scale(0.5) rotate(360deg);
+        opacity: 0;
+    }
+}
+
+/* Chispa/Particula */
+.chispa {
+    position: fixed;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 997;
+    animation: explotar 1.8s ease-out forwards;
+}
+
+@keyframes explotar {
+    0% {
+        transform: translate(0, 0) scale(1);
+        opacity: 1;
+    }
+    100% {
+        transform: translate(var(--tx), var(--ty)) scale(0);
+        opacity: 0;
+    }
+}
+
+/* Mensaje temporal */
+.mensaje-temporal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.8);
+    background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+    padding: 30px 50px;
+    border-radius: 15px;
+    font-size: 1.3em;
+    text-align: center;
+    box-shadow: 0 15px 50px rgba(0,0,0,0.2), 0 0 40px rgba(255,107,107,0.15);
+    z-index: 1001;
+    border-left: 5px solid #FF6B6B;
+    color: #2c3e50;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    animation: mensajeAparece 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+@keyframes mensajeAparece {
+    0% {
+        transform: translate(-50%, -50%) scale(0.7);
+        opacity: 0;
+    }
+    100% {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 1;
+    }
+}
+
+</style>
+
+<script>
+// Función para mostrar confeti y mensaje temporal
+function mostrarConfeti(mensaje) {
+    const body = document.body;
+
+    for(let i = 0; i < 30; i++) {
+        const confeti = document.createElement('div');
+        confeti.className = 'confeti';
+        // posición aleatoria horizontal dentro del viewport
+        confeti.style.left = Math.random() * window.innerWidth + 'px';
+        // empieza justo arriba de la pantalla
+        confeti.style.top = '-20px';
+        // color aleatorio
+        confeti.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 50%)`;
+        body.appendChild(confeti);
+
+        // eliminar confeti después de 2s
+        setTimeout(() => confeti.remove(), 2000);
+    }
+
+    // mensaje temporal
+    const mensajeDiv = document.createElement('div');
+    mensajeDiv.className = 'mensaje-temporal';
+    mensajeDiv.innerText = mensaje;
+    body.appendChild(mensajeDiv);
+
+    setTimeout(() => mensajeDiv.remove(), 2000);
+}
+
+
+</script>
+
+</head>
+
+<body>
+
+<!-- MODAL IMAGEN COMPLETA -->
+<div id="modalBanner" class="modal" onclick="cerrarBanner()">
+    <span class="cerrar">&times;</span>
+    <img class="modal-img" src="imagen_banner.png" alt="Banner completo">
+</div>
+
+<!-- MENÚ -->
+<nav class="menu">
+    <h2>EL RINCON DEL SABER</h2>
+    <ul>
+        <li><a href="#inicio">Inicio</a></li>
+        <li><a href="#programas">Programas</a></li>
+        <li><a href="#dirigido">Dirigido a</a></li>
+        <li><a href="#inscripcion">Inscripciones</a></li>
+        <li><a href="#contacto">Contacto</a></li>
+        <li><a href="index.html">Panel de Inicio</a></li>
+        <li><a href="cursos-game.html">Cursos</a></li>
+
+    </ul>
+</nav>
+
+<!-- BANNER -->
+<header class="banner" id="inicio" onclick="abrirBanner()">
+    <img src="imagen_banner.png" alt="Vacaciones Divertidas">
+    <div class="banner-texto">
+        <h1>Aprender no tiene que ser aburrido</h1>
+        <p>Tú también, únete al club</p>
+    </div>
+</header>
+
+<!-- TARJETAS -->
+<section class="cards" id="programas">
+    <h2>Programas</h2>
+    <div class="card-container">
+        <div class="card" onclick="mostrarConfeti('Matemática: ¡Aprendizaje divertido!')">
+            <h3>Matemática</h3>
+            <p>Aprendizaje lúdico y dinámico.</p>
+        </div>
+
+        <div class="card" onclick="mostrarConfeti('Comunicación: ¡Exprésate con confianza!')">
+            <h3>Comunicación</h3>
+            <p>Expresión oral y escrita.</p>
+        </div>
+
+        <div class="card" onclick="mostrarConfeti('Inglés: ¡Aprender jugando!')">
+            <h3>Inglés</h3>
+            <p>Vocabulario básico y juegos.</p>
+        </div>
+
+        <div class="card" onclick="mostrarConfeti('Mini Chef: ¡Creatividad y cocina!')">
+            <h3>Mini Chef</h3>
+            <p>Creatividad y trabajo en equipo.</p>
+        </div>
+
+        <div class="card" onclick="mostrarConfeti('Manualidades: ¡Arte y diversión!')">
+            <h3>Manualidades</h3>
+            <p>Arte, imaginación y motricidad.</p>
+        </div>
+    </div>
+</section>
+
+<!-- DIRIGIDO -->
+<section class="info" id="dirigido">
+    <h2>Dirigido a</h2>
+    <p>Niños de nivel Inicial y Primaria, en un ambiente seguro, divertido y educativo.</p>
+
+</section>
+
+<!-- INSCRIPCIÓN -->
+<section class="info" id="inscripcion">
+    <h2>Informes e Inscripciones</h2>
+    <p>📞 <a href="tel:937256545">937 256 545</a></p>
+    <p>📞 <a href="tel:947689342">947 689 342</a></p>
+</section>
+
+<!-- CONTACTO -->
+<footer id="contacto">
+    <p>📍 Av. Nila Cerruti #580 - Cafetal 1</p>
+    <p>© DERECHOS RESERVADOS:    El Rincon Del Saber 2026 </p>
+</footer>
+
+<script>
+function abrirBanner() {
+    document.getElementById("modalBanner").style.display = "flex";
+}
+
+function cerrarBanner() {
+    document.getElementById("modalBanner").style.display = "none";
+}
+
+// Función para mostrar confeti y mensaje temporal
+function mostrarConfeti(mensaje) {
+    const body = document.body;
+
+    // Crear 30 confetis
+    for(let i = 0; i < 30; i++) {
+        const confeti = document.createElement('div');
+        confeti.className = 'confeti';
+        confeti.style.left = Math.random() * window.innerWidth + 'px';
+        confeti.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 50%)`;
+        body.appendChild(confeti);
+
+        // Eliminar confeti después de la animación
+        setTimeout(() => confeti.remove(), 2000);
+    }
+
+    // Crear mensaje temporal
+    const mensajeDiv = document.createElement('div');
+    mensajeDiv.className = 'mensaje-temporal';
+    mensajeDiv.innerText = mensaje;
+    body.appendChild(mensajeDiv);
+
+    setTimeout(() => mensajeDiv.remove(), 2000);
+}
+
+// Función para crear efecto colorido y alegre en click
+function crearAnimacionAlegre(event) {
+    const x = event.clientX;
+    const y = event.clientY;
+    
+    const colores = ['#FF6B6B', '#4ECDC4', '#FFE66D', '#95E1D3', '#C7CEEA', '#FF85A2', '#FFEAA7', '#74B9FF'];
+    
+    // Crear burbujas flotantes
+    for(let i = 0; i < 5; i++) {
+        setTimeout(() => {
+            const burbuja = document.createElement('div');
+            burbuja.className = 'burbuja';
+            
+            const tamanio = Math.random() * 30 + 15;
+            const offsetX = (Math.random() - 0.5) * 100;
+            const offsetY = (Math.random() - 0.5) * 100;
+            
+            burbuja.style.width = tamanio + 'px';
+            burbuja.style.height = tamanio + 'px';
+            burbuja.style.left = (x + offsetX) + 'px';
+            burbuja.style.top = (y + offsetY) + 'px';
+            burbuja.style.background = colores[Math.floor(Math.random() * colores.length)];
+            
+            document.body.appendChild(burbuja);
+            setTimeout(() => burbuja.remove(), 2500);
+        }, i * 80);
+    }
+    
+    // Crear estrellas brillantes
+    for(let i = 0; i < 6; i++) {
+        setTimeout(() => {
+            const estrella = document.createElement('div');
+            estrella.className = 'estrella';
+            
+            const estrellas = ['⭐', '✨', '💫', '🌟'];
+            estrella.innerText = estrellas[Math.floor(Math.random() * estrellas.length)];
+            
+            const offsetX = (Math.random() - 0.5) * 120;
+            const offsetY = (Math.random() - 0.5) * 120;
+            
+            estrella.style.left = (x + offsetX) + 'px';
+            estrella.style.top = (y + offsetY) + 'px';
+            
+            document.body.appendChild(estrella);
+            setTimeout(() => estrella.remove(), 2000);
+        }, i * 100);
+    }
+    
+    // Crear chispas explosivas
+    for(let i = 0; i < 12; i++) {
+        const chispa = document.createElement('div');
+        chispa.className = 'chispa';
+        
+        const tamanio = Math.random() * 6 + 3;
+        const angulo = (i / 12) * Math.PI * 2;
+        const distancia = 80 + Math.random() * 50;
+        
+        const tx = Math.cos(angulo) * distancia;
+        const ty = Math.sin(angulo) * distancia;
+        
+        chispa.style.width = tamanio + 'px';
+        chispa.style.height = tamanio + 'px';
+        chispa.style.left = x + 'px';
+        chispa.style.top = y + 'px';
+        chispa.style.background = colores[Math.floor(Math.random() * colores.length)];
+        chispa.style.setProperty('--tx', tx + 'px');
+        chispa.style.setProperty('--ty', ty + 'px');
+        
+        document.body.appendChild(chispa);
+        setTimeout(() => chispa.remove(), 1800);
+    }
+}
+
+// Event listener para click en cualquier parte de la página
+document.addEventListener('click', function(event) {
+    // No ejecutar si se clickea en un elemento que tenga onclick (como las tarjetas)
+    if(event.target.closest('.card')) {
+        return;
+    }
+    
+    // Crear el efecto colorido
+    crearAnimacionAlegre(event);
+});
+
+// Permitir que las tarjetas sigan funcionando normalmente
+document.querySelectorAll('.card').forEach(card => {
+    card.addEventListener('click', function(e) {
+        e.stopPropagation();
+    });
+});
+</script>
+
+</body>
+</html>

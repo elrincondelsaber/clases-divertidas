@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Rincón del Saber | Juego</title>
+
+  <style>
+    :root{--accent:#7c3aed}
+    body{
+      margin:0;
+      font-family:Segoe UI,Arial;
+      background:linear-gradient(180deg,#071024,#09203a);
+      color:#e6eef8;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      min-height:100vh;
+    }
+    .container{
+      width:420px;
+    /* modal */
+    .modal{position:fixed;left:0;top:0;right:0;bottom:0;display:flex;align-items:center;justify-content:center;background:rgba(2,6,23,0.6);visibility:hidden;opacity:0;transition:opacity .18s,visibility .18s}
+    .modal.show{visibility:visible;opacity:1}
+    .card{background:#071425;padding:18px;border-radius:12px;width:420px;max-width:94%;box-shadow:0 20px 50px rgba(2,6,23,0.6);border:1px solid rgba(255,255,255,0.03)}
+    .options label{display:block;padding:8px;border-radius:8px;margin:8px 0;border:1px solid transparent;cursor:pointer}
+    .options input{margin-right:10px}
+    .small{font-size:13px;color:#9fb6d9;margin-top:8px}
+      padding:28px;
+      background:rgba(255,255,255,0.08);
+      border-radius:16px;
+      box-shadow:0 15px 35px rgba(0,0,0,.5);
+      text-align:center;
+    }
+    h1{margin-bottom:14px}
+    .btn{
+      width:100%;
+      padding:14px;
+      margin-top:12px;
+      border:none;
+      border-radius:12px;
+      font-size:18px;
+      font-weight:bold;
+      cursor:pointer;
+      color:white;
+      background:linear-gradient(90deg,var(--accent),#06b6d4);
+    }
+    footer{margin-top:16px;font-size:12px;color:#b6cfff}
+  </style>
+</head>
+
+<body>
+
+<div class="container">
+  <h1>🎮 Rincón del Saber</h1>
+  <p>Pulsa para comenzar</p>
+
+  <button class="btn" id="playBtn">JUGAR</button>
+  <button class="btn" id="verCursos">VER CURSOS</button>
+
+  <!-- Modal pregunta aleatoria -->
+  <div id="modal" class="modal" role="dialog" aria-hidden="true">
+    <div class="card">
+      <h3 id="qTitle">Pregunta</h3>
+      <div id="qText" style="margin-top:8px"></div>
+      <form id="qForm" style="margin-top:12px"></form>
+      <div style="display:flex;gap:8px;margin-top:12px">
+        <button class="btn" id="submitQ">Responder</button>
+        <button class="btn" id="nextQ" style="background:transparent;border:1px solid rgba(255,255,255,0.06);color:#cfe5ff">Siguiente</button>
+      </div>
+      <div id="feedback" class="small"></div>
+      <div style="text-align:right;margin-top:8px"><button id="closeModal" class="small" style="background:transparent;border:none;color:#9fb6d9;cursor:pointer">Cerrar</button></div>
+    </div>
+  </div>
+
+  <footer>El Rincón del Saber ✨</footer>
+</div>
+
+<script>
+  // dataset compartido (mantener sincronía con cursos-game.html)
+  const data = {
+    matematica: {
+      title: 'Matemática', qs:[
+        {q:'¿Cuánto es 7 × 8?', opts:['54','56','58'], a:1},
+        {q:'¿Cuál es el resultado de 12 ÷ 3?', opts:['4','3','6'], a:0}
+      ]
+    },
+    comunicacion: {
+      title: 'Comunicación', qs:[
+        {q:'¿Cuál es una forma cordial de saludar?', opts:['Hola, ¿cómo estás?','Quédate quieto','Apaga la luz'], a:0},
+        {q:'¿Qué es un sustantivo?', opts:['Una acción','Una persona/objeto','Un adjetivo'], a:1}
+      ]
+    },
+    chef: {
+      title: 'Chef', qs:[
+        {q:'¿Qué utensilio sirve para mezclar?', opts:['Cuchillo','Cuchara','Sartén'], a:1},
+        {q:'¿Qué se cocina en una sartén?', opts:['Sopa','Tortilla','Ensalada'], a:1}
+      ]
+    },
+    ingles: {
+      title: 'Inglés', qs:[
+        {q:'¿Cómo se dice "hola" en inglés?', opts:['Hello','Hola','Adiós'], a:0},
+        {q:'¿Qué color es "red"?', opts:['azul','rojo','verde'], a:1}
+      ]
+    }
+  };
+
+  const modal = document.getElementById('modal');
+  const qTitle = document.getElementById('qTitle');
+  const qText = document.getElementById('qText');
+  const qForm = document.getElementById('qForm');
+  const feedback = document.getElementById('feedback');
+  let current = null;
+
+  function randQuestion(){
+    const keys = Object.keys(data);
+    const k = keys[Math.floor(Math.random()*keys.length)];
+    const set = data[k];
+    const qi = Math.floor(Math.random()*set.qs.length);
+    return {course:k, item:set.qs[qi]};
+  }
+
+  function openModalWithRandom(){
+    const r = randQuestion();
+    current = r;
+    qTitle.textContent = r.course ? data[r.course].title : 'Pregunta';
+    qText.textContent = r.item.q;
+    qForm.innerHTML = '';
+    r.item.opts.forEach((op,i)=>{
+      const id = `op${i}`;
+      const label = document.createElement('label');
+      label.innerHTML = `<input name="opt" type="radio" value="${i}"> ${op}`;
+      qForm.appendChild(label);
+    });
+    feedback.textContent = '';
+    modal.classList.add('show');
+    modal.setAttribute('aria-hidden','false');
+  }
+
+  document.getElementById('playBtn').addEventListener('click', ()=>{
+    openModalWithRandom();
+  });
+
+  document.getElementById('verCursos').addEventListener('click', ()=>{
+    window.location.href = 'cursos-game.html';
+  });
+
+  document.getElementById('closeModal').addEventListener('click', ()=>{
+    modal.classList.remove('show');
+    modal.setAttribute('aria-hidden','true');
+  });
+
+  document.getElementById('submitQ').addEventListener('click',(ev)=>{
+    ev.preventDefault();
+    if(!current) return;
+    const sel = qForm.querySelector('input[name=opt]:checked');
+    if(!sel){ feedback.textContent = 'Selecciona una opción'; return; }
+    const val = parseInt(sel.value,10);
+    if(val===current.item.a){ feedback.textContent = '¡Correcto! 🎉'; feedback.style.color='#a6f3c5'; }
+    else { feedback.textContent = 'Incorrecto. Intenta de nuevo.'; feedback.style.color='#ffb6b6'; }
+  });
+
+  document.getElementById('nextQ').addEventListener('click',(ev)=>{
+    ev.preventDefault(); openModalWithRandom();
+  });
+</script>
+
+</body>
+</html>

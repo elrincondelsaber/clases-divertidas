@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Inglés | Rincón del Saber</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0;font-family:'Segoe UI',system-ui}
+body{
+  min-height:100vh;
+  background:linear-gradient(135deg,#1e3c72,#2a5298);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  color:#fff;
+}
+
+.juego{
+  background:rgba(255,255,255,.15);
+  backdrop-filter:blur(12px);
+  border-radius:22px;
+  padding:25px;
+  width:100%;
+  max-width:440px;
+  text-align:center;
+  box-shadow:0 25px 50px rgba(0,0,0,.4);
+}
+
+.puntaje{font-size:15px;margin-bottom:10px}
+.pregunta{font-size:20px;margin:18px 0;font-weight:bold}
+
+.opciones button{
+  width:100%;
+  margin:6px 0;
+  padding:12px;
+  border:none;
+  border-radius:14px;
+  font-size:16px;
+  font-weight:bold;
+  cursor:pointer;
+  background:linear-gradient(135deg,#36d1dc,#5b86e5);
+  color:white;
+}
+
+.correcto{animation:ok .4s}
+.incorrecto{animation:bad .4s}
+
+@keyframes ok{
+  0%{background:#4caf50}
+  100%{background:transparent}
+}
+@keyframes bad{
+  0%{background:#f44336}
+  100%{background:transparent}
+}
+
+.final{display:none}
+
+/* =========================
+   ESTILO PANTALLA FINAL
+   ========================= */
+
+.final{
+  background:rgba(255,255,255,.15);
+  backdrop-filter:blur(12px);
+  border-radius:22px;
+  padding:30px;
+  box-shadow:0 25px 50px rgba(0,0,0,.45);
+}
+
+/* Botones finales */
+.final button{
+  width:100%;
+  margin-top:12px;
+  padding:14px;
+  border:none;
+  border-radius:16px;
+  font-size:16px;
+  font-weight:bold;
+  cursor:pointer;
+  color:white;
+  background:linear-gradient(135deg,#36d1dc,#5b86e5);
+  box-shadow:0 10px 22px rgba(0,0,0,.35);
+  transition:transform .2s, box-shadow .2s;
+}
+
+/* Hover elegante */
+.final button:hover{
+  transform:translateY(-2px);
+  box-shadow:0 14px 28px rgba(0,0,0,.45);
+}
+
+/* Click */
+.final button:active{
+  transform:scale(.98);
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="juego" id="juego">
+  <h2>🇬🇧 Inglés</h2>
+  <div class="puntaje">
+    Pregunta <span id="num">1</span>/10 |
+    ⭐ <span id="puntos">0</span>
+  </div>
+
+  <div class="pregunta" id="pregunta"></div>
+
+  <div class="opciones" id="opciones"></div>
+</div>
+
+<div class="juego final" id="final">
+  <h2>🎉 ¡Juego terminado!</h2>
+  <p>Correctas: <strong><span id="correctas"></span>/10</strong></p>
+  <p>Puntaje total: ⭐ <span id="total"></span></p>
+
+  <button onclick="reiniciar()">Jugar de nuevo</button>
+  <button onclick="resetPuntos()">Reiniciar puntos</button>
+  <button onclick="volver()">Volver a cursos</button>
+</div>
+
+<script>
+const preguntas = [
+  {
+    texto: "¿Cómo se dice 'Casa' en inglés?",
+    opciones: ["House", "Dog", "Cat"],
+    correcta: 0
+  },
+  {
+    texto: "¿Cómo se dice 'Manzana'?",
+    opciones: ["Apple", "Orange", "Banana"],
+    correcta: 0
+  },
+  {
+    texto: "¿Qué palabra significa 'Libro'?",
+    opciones: ["Book", "Pen", "Chair"],
+    correcta: 0
+  },
+  {
+    texto: "¿Cómo se dice 'Hola'?",
+    opciones: ["Hi", "Bye", "Please"],
+    correcta: 0
+  },
+  {
+    texto: "¿Cuál es el plural de 'Dog'?",
+    opciones: ["Dogs", "Doges", "Dog"],
+    correcta: 0
+  },
+  {
+    texto: "¿Qué palabra significa 'Rojo'?",
+    opciones: ["Red", "Blue", "Green"],
+    correcta: 0
+  },
+  {
+    texto: "¿Cómo se dice 'Agua'?",
+    opciones: ["Water", "Fire", "Air"],
+    correcta: 0
+  },
+  {
+    texto: "¿Qué palabra es un pronombre?",
+    opciones: ["He", "Table", "Apple"],
+    correcta: 0
+  },
+  {
+    texto: "¿Cómo se dice 'Amigo'?",
+    opciones: ["Friend", "Enemy", "Neighbor"],
+    correcta: 0
+  },
+  {
+    texto: "¿Qué palabra significa 'Escuela'?",
+    opciones: ["School", "Home", "Park"],
+    correcta: 0
+  }
+];
+
+let actual = 0;
+let correctas = 0;
+let total = Number(localStorage.getItem("inglesPuntos")) || 0;
+
+document.getElementById("total").textContent = total;
+
+function cargar(){
+  const p = preguntas[actual];
+  document.getElementById("pregunta").textContent = p.texto;
+  document.getElementById("opciones").innerHTML = "";
+
+  p.opciones.forEach((op,i)=>{
+    const btn = document.createElement("button");
+    btn.textContent = op;
+    btn.onclick = ()=>responder(i);
+    document.getElementById("opciones").appendChild(btn);
+  });
+}
+
+function responder(i){
+  const box = document.getElementById("juego");
+
+  if(i === preguntas[actual].correcta){
+    correctas++;
+    total++;
+    box.classList.add("correcto");
+  }else{
+    box.classList.add("incorrecto");
+  }
+
+  localStorage.setItem("inglesPuntos", total);
+  document.getElementById("puntos").textContent = correctas;
+
+  setTimeout(()=>{
+    box.classList.remove("correcto","incorrecto");
+    actual++;
+    if(actual < 10){
+      document.getElementById("num").textContent = actual + 1;
+      cargar();
+    }else{
+      fin();
+    }
+  },500);
+}
+
+function fin(){
+  document.getElementById("juego").style.display="none";
+  document.getElementById("final").style.display="block";
+  document.getElementById("correctas").textContent = correctas;
+  document.getElementById("total").textContent = total;
+}
+
+function reiniciar(){
+  actual=0;
+  correctas=0;
+  document.getElementById("num").textContent=1;
+  document.getElementById("puntos").textContent=0;
+  document.getElementById("final").style.display="none";
+  document.getElementById("juego").style.display="block";
+  cargar();
+}
+
+function resetPuntos(){
+  if(confirm("¿Reiniciar puntos totales?")){
+    total=0;
+    localStorage.setItem("inglesPuntos",0);
+    document.getElementById("total").textContent=0;
+  }
+}
+
+function volver(){
+  window.location.href="cursos-game.html";
+}
+
+cargar();
+</script>
+</body>
+</html>

@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Matemática | Rincón del Saber</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0;font-family:'Segoe UI',system-ui}
+body{
+  min-height:100vh;
+  background:linear-gradient(135deg,#43cea2,#185a9d);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  color:#fff;
+}
+
+.juego{
+  background:rgba(255,255,255,.15);
+  backdrop-filter:blur(12px);
+  border-radius:22px;
+  padding:25px;
+  width:100%;
+  max-width:420px;
+  text-align:center;
+  box-shadow:0 25px 50px rgba(0,0,0,.4);
+}
+
+.pregunta{font-size:22px;margin:18px 0;font-weight:bold}
+.puntaje{font-size:15px;margin-bottom:10px}
+input{
+  width:100%;
+  padding:12px;
+  font-size:18px;
+  border:none;
+  border-radius:12px;
+  text-align:center;
+}
+button{
+  width:100%;
+  padding:14px;
+  margin-top:12px;
+  border:none;
+  border-radius:14px;
+  font-size:17px;
+  font-weight:bold;
+  cursor:pointer;
+  background:linear-gradient(135deg,#ff9800,#ff5722);
+  color:white;
+}
+
+.correcto{animation:ok .4s}
+.incorrecto{animation:bad .4s}
+
+@keyframes ok{
+  0%{background:#43cea2}
+  100%{background:transparent}
+}
+@keyframes bad{
+  0%{background:#ff5252}
+  100%{background:transparent}
+}
+
+.final{display:none}
+
+</style>
+</head>
+
+<body>
+<div class="juego" id="juego">
+  <h2>➕ Matemática</h2>
+  <div class="puntaje">
+    Pregunta <span id="num">1</span>/10 |
+    ⭐ <span id="puntos">0</span>
+  </div>
+
+  <div class="pregunta" id="pregunta"></div>
+  <input type="number" id="respuesta" placeholder="Tu respuesta">
+  <button onclick="responder()">Responder</button>
+</div>
+
+<div class="juego final" id="final">
+  <h2>🎉 ¡Juego terminado!</h2>
+  <p>Correctas: <strong><span id="correctas"></span>/10</strong></p>
+  <p>Puntaje total: ⭐ <span id="total"></span></p>
+
+  <button onclick="reiniciar()">Jugar de nuevo</button>
+  <button onclick="resetPuntos()">Reiniciar puntos</button>
+  <button onclick="volver()">Volver a cursos</button>
+</div>
+
+<script>
+let actual = 1;
+let correctas = 0;
+let total = Number(localStorage.getItem("matePuntos")) || 0;
+let a,b;
+
+document.getElementById("total").textContent = total;
+
+function nueva(){
+  a = Math.floor(Math.random()*10)+1;
+  b = Math.floor(Math.random()*10)+1;
+  document.getElementById("pregunta").textContent =
+    `¿Cuánto es ${a} + ${b}?`;
+  document.getElementById("respuesta").value="";
+}
+
+function responder(){
+  const r = Number(document.getElementById("respuesta").value);
+  const box = document.getElementById("juego");
+
+  if(r === a + b){
+    correctas++;
+    total++;
+    box.classList.add("correcto");
+  }else{
+    box.classList.add("incorrecto");
+  }
+
+  localStorage.setItem("matePuntos", total);
+  document.getElementById("puntos").textContent = correctas;
+
+  setTimeout(()=>{
+    box.classList.remove("correcto","incorrecto");
+    if(actual < 10){
+      actual++;
+      document.getElementById("num").textContent = actual;
+      nueva();
+    }else{
+      fin();
+    }
+  },500);
+}
+
+function fin(){
+  document.getElementById("juego").style.display="none";
+  document.getElementById("final").style.display="block";
+  document.getElementById("correctas").textContent = correctas;
+  document.getElementById("total").textContent = total;
+}
+
+function reiniciar(){
+  actual=1; correctas=0;
+  document.getElementById("num").textContent=1;
+  document.getElementById("puntos").textContent=0;
+  document.getElementById("final").style.display="none";
+  document.getElementById("juego").style.display="block";
+  nueva();
+}
+
+function resetPuntos(){
+  if(confirm("¿Reiniciar puntos totales?")){
+    total=0;
+    localStorage.setItem("matePuntos",0);
+    document.getElementById("total").textContent=0;
+  }
+}
+
+function volver(){
+  window.location.href="cursos-game.html";
+}
+
+nueva();
+</script>
+</body>
+</html>

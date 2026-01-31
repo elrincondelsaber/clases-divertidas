@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Manualidades | Rincón del Saber</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+
+<style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:'Poppins', system-ui;
+}
+
+body{
+  min-height:100vh;
+  display:flex;
+  justify-content:center;
+  padding:40px 20px;
+  background:linear-gradient(135deg,#667eea,#764ba2);
+  color:#fff;
+}
+
+.contenedor{
+  width:100%;
+  max-width:800px;
+}
+
+h1{
+  text-align:center;
+  margin-bottom:35px;
+  font-weight:700;
+  letter-spacing:1px;
+}
+
+/* TARJETAS */
+.tarjeta{
+  background:rgba(255,255,255,0.18);
+  backdrop-filter:blur(14px);
+  border-radius:22px;
+  padding:22px;
+  margin-bottom:25px;
+  cursor:pointer;
+  box-shadow:0 15px 35px rgba(0,0,0,.25);
+  transition:transform .25s, box-shadow .25s;
+}
+
+.tarjeta:hover{
+  transform:translateY(-6px);
+  box-shadow:0 20px 45px rgba(0,0,0,.35);
+}
+
+h2{
+  font-size:22px;
+  font-weight:600;
+}
+
+/* DETALLE */
+.detalle{
+  max-height:0;
+  overflow:hidden;
+  transition:max-height .5s ease, opacity .4s ease;
+  opacity:0;
+  margin-top:12px;
+}
+
+.tarjeta.activa .detalle{
+  max-height:1000px;
+  opacity:1;
+}
+
+.detalle p,
+.detalle ol{
+  font-size:15px;
+  line-height:1.6;
+  margin-bottom:10px;
+}
+
+.detalle ol{
+  padding-left:22px;
+}
+
+.etiqueta{
+  display:inline-block;
+  background:linear-gradient(135deg,#ff9a9e,#fad0c4);
+  color:#333;
+  padding:6px 12px;
+  border-radius:12px;
+  font-size:13px;
+  margin-top:8px;
+}
+.breadcrumb{
+  margin-bottom:25px;
+  font-size:14px;
+  opacity:.9;
+}
+
+.breadcrumb a{
+  color:#fff;
+  text-decoration:none;
+  font-weight:500;
+}
+
+.breadcrumb span{
+  margin:0 6px;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="contenedor">
+  <h1>🎨 Manualidades Creativas</h1>
+
+  <nav class="breadcrumb">
+  <a href="index.html">Inicio</a>
+  <span>›</span>
+  <a href="cursos-game.html">Cursos</a>
+  <span>›</span>
+  <span>Manualidades</span>
+</nav>
+
+  <!-- Proyecto 1 -->
+  <div class="tarjeta">
+    <h2>🌿 Jarrón Reciclado</h2>
+    <div class="detalle">
+      <p><strong>Materiales:</strong> Botella de vidrio, pintura acrílica, pinceles, cuerda decorativa.</p>
+      <p><strong>Pasos:</strong></p>
+      <ol>
+        <li>Lavar y secar bien la botella.</li>
+        <li>Pintar la botella con los colores deseados.</li>
+        <li>Dejar secar completamente.</li>
+        <li>Decorarla con cuerda alrededor del cuello o dibujar detalles.</li>
+        <li>Colocar flores o ramas secas.</li>
+      </ol>
+      <p><strong>Consejos:</strong> Usa pintura acrílica para vidrio, evita colores muy oscuros si quieres un efecto luminoso. Este proyecto fomenta creatividad y reciclaje.</p>
+      <span class="etiqueta">♻️ Reciclaje creativo</span>
+    </div>
+  </div>
+
+  <!-- Proyecto 2 -->
+  <div class="tarjeta">
+    <h2>✏️ Portalápices Reciclado</h2>
+    <div class="detalle">
+      <p><strong>Materiales:</strong> Latas vacías, papel decorativo, pegamento, tijeras, cinta adhesiva.</p>
+      <p><strong>Pasos:</strong></p>
+      <ol>
+        <li>Lavar y secar bien la lata.</li>
+        <li>Forrar la lata con papel decorativo o pintura.</li>
+        <li>Decorar con pegatinas, cintas o pinturas.</li>
+        <li>Colocar lápices, bolígrafos y marcadores.</li>
+      </ol>
+      <p><strong>Consejos:</strong> Es perfecto para organizar escritorios y reutilizar materiales que normalmente se desechan.</p>
+      <span class="etiqueta">🧠 Organización</span>
+    </div>
+  </div>
+
+  <!-- Proyecto 3 -->
+  <div class="tarjeta">
+    <h2>🌈 Móvil Colgante de Papel</h2>
+    <div class="detalle">
+      <p><strong>Materiales:</strong> Cartulina de colores, hilo, tijeras, pegamento o cinta adhesiva, aro de madera o rama.</p>
+      <p><strong>Pasos:</strong></p>
+      <ol>
+        <li>Recortar figuras (estrellas, corazones, círculos) en cartulina.</li>
+        <li>Colocar hilo en cada figura y pegar o atar.</li>
+        <li>Atar los hilos al aro o rama de madera.</li>
+        <li>Colgar el móvil donde desees decorar.</li>
+      </ol>
+      <p><strong>Consejos:</strong> Combina colores y formas para un efecto visual divertido. Ideal para habitaciones infantiles o como regalo creativo.</p>
+      <span class="etiqueta">🎁 Decoración</span>
+    </div>
+  </div>
+
+</div>
+
+<script>
+/* Mostrar / ocultar detalles */
+document.querySelectorAll('.tarjeta').forEach(tarjeta=>{
+  tarjeta.addEventListener('click', ()=>{
+    tarjeta.classList.toggle('activa');
+  });
+});
+</script>
+
+</body>
+</html>
